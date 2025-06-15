@@ -1,0 +1,4 @@
+# fnx.toml  (root of your app repo)
+repo    = "git@github.com:example/finchknox-secrets.git"
+project = "demo"     # directory name inside the secrets repo
+env     = "dev"
