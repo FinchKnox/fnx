@@ -2,6 +2,6 @@
 
 
 build:
-	go build -o bin/fnx cmd/root.go
+	go build -o bin/fnx
 
  
