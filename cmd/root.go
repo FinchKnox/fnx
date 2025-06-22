@@ -17,7 +17,7 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "fnx",
-	Short: "FinchKnox CLI – zero-friction secrets runner",
+	Short: "FinchKnox CLI – zero-friction secrets manager",
 	PersistentPreRun: func(cmd *cobra.Command, _ []string) {
 		cfg, cfgErr = config.Load(flagRepo)
 	},
