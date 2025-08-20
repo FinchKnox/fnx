@@ -1,31 +1,29 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"os"
 	"path/filepath"
-
-	toml "github.com/pelletier/go-toml/v2"
 )
 
 type ProjectConfig struct {
-	Repo    string `toml:"repo"`
-	Project string `toml:"project"`
-	Env     string `toml:"env"`
-	Branch  string `toml:"branch"`
-	Tag     string `toml:"tag"`
-	Push    bool   `toml:"push"`
+	Repo    string `json:"repo"`
+	Project string `json:"project"`
+	Env     string `json:"env"`
+	Branch  string `json:"branch"`
+	Tag     string `json:"tag"`
+	Push    bool   `json:"push"`
 }
 
-// Load finds fnx.toml or .fnx/default.toml and parses it.
 func Load(repoOverride string) (*ProjectConfig, error) {
-	if _, err := os.Stat("fnx.toml"); err == nil {
-		return parseFile("fnx.toml", repoOverride)
+	if _, err := os.Stat("fnx.json"); err == nil {
+		return parseFile("fnx.json", repoOverride)
 	}
 	if _, err := os.Stat(".fnx"); err == nil {
-		return parseFile(filepath.Join(".fnx", "default.toml"), repoOverride)
+		return parseFile(filepath.Join(".fnx", "default.json"), repoOverride)
 	}
-	return nil, errors.New("no fnx config found (fnx.toml or .fnx/default.toml)")
+	return nil, errors.New("no fnx config found (fnx.json or .fnx/default.json)")
 }
 
 func parseFile(path, repoOverride string) (*ProjectConfig, error) {
@@ -33,8 +31,16 @@ func parseFile(path, repoOverride string) (*ProjectConfig, error) {
 	if err != nil {
 		return nil, err
 	}
+	// allow $schema present in JSON without failing
+	var raw map[string]any
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return nil, err
+	}
+	delete(raw, "$schema")
+	out, _ := json.Marshal(raw)
+
 	var cfg ProjectConfig
-	if err := toml.Unmarshal(b, &cfg); err != nil {
+	if err := json.Unmarshal(out, &cfg); err != nil {
 		return nil, err
 	}
 	if repoOverride != "" {

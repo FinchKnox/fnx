@@ -1,0 +1,15 @@
+{
+    "$id": "fnx.schema.json",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "$schema": { "type": "string" },
+      "repo":    { "type": "string", "description": "Git URL or path to the secrets repo" },
+      "project": { "type": "string", "description": "Directory inside the secrets repo" },
+      "env":     { "type": "string", "description": "dev | staging | prod (free-form allowed)" },
+      "branch":  { "type": "string" },
+      "tag":     { "type": "string", "description": "If set, takes precedence over branch" },
+      "push":    { "type": "boolean", "default": true }
+    },
+    "required": ["repo", "project", "env"]
+  }

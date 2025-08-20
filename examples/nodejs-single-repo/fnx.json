@@ -1,0 +1,7 @@
+
+{
+  "$schema": "../../.vscode/fnx.schema.json",
+  "repo": "git@github.com:finchknox/example-secrets.git",
+  "project": "nodejs",
+  "env": "dev"
+}
